@@ -1,0 +1,1 @@
+docker build -f /root/mydocker/tomcat/Dockerfile -t m2lan/tomcat8.5 .
