@@ -1,0 +1,20 @@
+version: '3'
+services:
+  nginx:
+    image: nginx
+    depends_on:
+      - 'php'
+    ports:
+      - '80:80'
+    volumes:
+      - '/root/mydocker/nginx/fastcgi_params:/etc/nginx/fastcgi_params'
+      - '/root/mydocker/nginx/conf:/etc/nginx/conf.d'
+      - '/root/mydocker/nginx/html:/usr/share/nginx/html'
+    container_name: 'compose-nginx'
+  php:
+    image: m2lan/php
+    ports:
+      - '9000:9000'
+    volumes:
+      - '/root/mydocker/nginx/html:/var/www/html'
+    container_name: 'compose-php'
