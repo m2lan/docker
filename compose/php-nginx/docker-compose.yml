@@ -2,19 +2,23 @@ version: '3'
 services:
   nginx:
     image: nginx
-    depends_on:
-      - 'php'
     ports:
       - '80:80'
+      - '443:443'
     volumes:
       - '/root/mydocker/nginx/fastcgi_params:/etc/nginx/fastcgi_params'
       - '/root/mydocker/nginx/conf:/etc/nginx/conf.d'
-      - '/root/mydocker/nginx/html:/usr/share/nginx/html'
-    container_name: 'compose-nginx'
+      - '/root/mydocker/nginx/html:/var/www'
+    container_name: compose-nginx
+    depends_on:
+      - php
   php:
     image: m2lan/php
     ports:
       - '9000:9000'
     volumes:
-      - '/root/mydocker/nginx/html:/var/www/html'
-    container_name: 'compose-php'
+      - '/root/mydocker/nginx/html:/var/www'
+      - '/root/mydocker/php/conf/php-fpm.d:/etc/php-fpm.d'
+      - '/root/mydocker/php/conf/php.ini:/etc/php.ini'
+      - '/root/mydocker/php/conf/php-fpm.conf:/etc/php-fpm.conf'
+    container_name: compose-php
