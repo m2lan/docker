@@ -13,7 +13,7 @@ services:
     depends_on:
       - php
   php:
-    image: m2lan/php
+    image: m2lan/php72
     ports:
       - '9000:9000'
     volumes:
@@ -22,3 +22,16 @@ services:
       - '/root/mydocker/php/conf/php.ini:/etc/php.ini'
       - '/root/mydocker/php/conf/php-fpm.conf:/etc/php-fpm.conf'
     container_name: compose-php
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:5.7
+    ports:
+      - '3306:3306'
+    volumes:
+      - '/root/mydocker/mysql/conf:/etc/mysql/conf.d'
+      - '/root/mydocker/mysql/logs:/logs'
+      - '/root/mydocker/mysql/data:/var/lib/mysql'
+    environment:
+      MYSQL_ROOT_PASSWORD: '123456'
+    container_name: compose-mysql
