@@ -1,0 +1,49 @@
+version: '3'
+services:
+  nginx:
+    image: nginx
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - '/root/mydocker/nginx/fastcgi_params:/etc/nginx/fastcgi_params'
+      - '/root/mydocker/nginx/conf:/etc/nginx/conf.d'
+      - '/root/mydocker/nginx/html:/var/www'
+    container_name: compose-nginx
+    depends_on:
+      - php
+  php:
+    image: m2lan/swoole
+    ports:
+      - '9000:9000'
+    volumes:
+      - '/root/mydocker/nginx/html:/var/www'
+      - '/root/mydocker/php/conf/php-fpm.d:/etc/php-fpm.d'
+      - '/root/mydocker/php/conf/swoole/php.ini:/etc/php.ini'
+      - '/root/mydocker/php/conf/php-fpm.conf:/etc/php-fpm.conf'
+      - '/root/mydocker/php/conf/swoole/php.d:/etc/php.d'
+    container_name: compose-php
+    depends_on:
+      - mysql
+      - redis
+  mysql:
+    image: mysql:5.7
+    ports:
+      - '3306:3306'
+    volumes:
+      - '/root/mydocker/mysql/conf:/etc/mysql/conf.d'
+      - '/root/mydocker/mysql/logs:/logs'
+      - '/root/mydocker/mysql/data:/var/lib/mysql'
+    environment:
+      MYSQL_ROOT_PASSWORD: '123456'
+    container_name: compose-mysql
+  redis:
+    image: redis:4.0
+    ports:
+      - '6379:6379'
+    volumes:
+      - '/root/mydocker/redis/data:/data'
+      - '/root/mydocker/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf'
+    entrypoint: redis-server /usr/local/etc/redis/redis.conf --appendonly yes
+    restart: always
+    container_name: compose-redis
