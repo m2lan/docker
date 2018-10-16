@@ -1,0 +1,10 @@
+version: '3'
+services:
+  rabbitmq:
+    image: m2lan/tomcat8.5
+    ports:
+      - '8080:8080'
+    container_name: compose-tomcat
+    volumes:
+      - '/root/mydocker/tomcat/test:/usr/local/apache-tomcat-8.5.34/webapps/test'
+      - '/root/mydocker/tomcat/logs:/usr/local/apache-tomcat-8.5.34/logs'
