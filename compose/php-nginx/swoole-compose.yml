@@ -13,16 +13,28 @@ services:
     depends_on:
       - php
   php:
-    image: m2lan/swoole
+    image: m2lan/php72
     ports:
       - '9000:9000'
     volumes:
       - '/root/mydocker/nginx/html:/var/www'
       - '/root/mydocker/php/conf/php-fpm.d:/etc/php-fpm.d'
-      - '/root/mydocker/php/conf/swoole/php.ini:/etc/php.ini'
+      - '/root/mydocker/php/conf/php.ini:/etc/php.ini'
       - '/root/mydocker/php/conf/php-fpm.conf:/etc/php-fpm.conf'
-      - '/root/mydocker/php/conf/swoole/php.d:/etc/php.d'
     container_name: compose-php
+    depends_on:
+      - mysql
+      - redis
+  swoole:
+    image: m2lan/swoole
+    ports:
+      - '10000:10000'
+    volumes:
+      - '/root/mydocker/nginx/html:/var/www'
+      - '/root/mydocker/php/conf/swoole/php.ini:/etc/php.ini'
+      - '/root/mydocker/php/conf/swoole/php.d:/etc/php.d' 
+    container_name: compose-swoole
+    command: php /var/www/mythink/think websocket:start
     depends_on:
       - mysql
       - redis
