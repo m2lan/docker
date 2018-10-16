@@ -1,0 +1,11 @@
+version: '3'
+services:
+  rabbitmq:
+    image: m2lan/rabbitmq
+    ports:
+      - '15672:15672'
+      - '5672:5672'
+    container_name: compose-rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=zhangsan
+      - RABBITMQ_DEFAULT_PASS=123456
